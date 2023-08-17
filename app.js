@@ -16,7 +16,6 @@ function addTask() {
     });
   });
 }
-
 function deleteTask() {
   rl.question("Índice de la tarea a eliminar: ", (index) => {
     if (index >= 0 && index < tasks.length) {
@@ -28,7 +27,6 @@ function deleteTask() {
     showMenu();
   });
 }
-
 function completeTask() {
   rl.question("Índice de la tarea completada: ", (index) => {
     if (index >= 0 && index < tasks.length) {
@@ -40,7 +38,6 @@ function completeTask() {
     showMenu();
   });
 }
-
 function showTasks() {
   console.log("Lista de tareas:");
   tasks.forEach((task, index) => {
@@ -52,7 +49,6 @@ function showTasks() {
   });
   showMenu();
 }
-
 function showMenu() {
   console.log("\n1. Añadir tarea");
   console.log("2. Eliminar tarea");
