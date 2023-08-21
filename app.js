@@ -8,37 +8,46 @@ const rl = readline.createInterface({
 const tasks = [];
 
 function addTask() {
-  rl.question("Indicador: ", (indicador) => {
-    rl.question("Descripción: ", (descripcion) => {
-      tasks.push({ indicador, descripcion, completada: false });
-      console.log("Tarea añadida.");
-      showMenu();
+  return new Promise((resolve) => {
+    rl.question("Indicador: ", (indicador) => {
+      rl.question("Descripción: ", (descripcion) => {
+        tasks.push({ indicador, descripcion, completada: false });
+        console.log("Tarea añadida.");
+        resolve();
+      });
     });
   });
 }
+
 function deleteTask() {
-  rl.question("Índice de la tarea a eliminar: ", (index) => {
-    if (index >= 0 && index < tasks.length) {
-      tasks.splice(index, 1);
-      console.log("Tarea eliminada.");
-    } else {
-      console.log("Índice inválido.");
-    }
-    showMenu();
+  return new Promise((resolve) => {
+    rl.question("Índice de la tarea a eliminar: ", (index) => {
+      if (index >= 0 && index < tasks.length) {
+        tasks.splice(index, 1);
+        console.log("Tarea eliminada.");
+      } else {
+        console.log("Índice inválido.");
+      }
+      resolve();
+    });
   });
 }
+
 function completeTask() {
-  rl.question("Índice de la tarea completada: ", (index) => {
-    if (index >= 0 && index < tasks.length) {
-      tasks[index].completada = true;
-      console.log("Tarea completada.");
-    } else {
-      console.log("Índice inválido.");
-    }
-    showMenu();
+  return new Promise((resolve) => {
+    rl.question("Índice de la tarea completada: ", (index) => {
+      if (index >= 0 && index < tasks.length) {
+        tasks[index].completada = true;
+        console.log("Tarea completada.");
+      } else {
+        console.log("Índice inválido.");
+      }
+      resolve();
+    });
   });
 }
-function showTasks() {
+
+async function showTasks() {
   console.log("Lista de tareas:");
   tasks.forEach((task, index) => {
     console.log(
@@ -47,37 +56,42 @@ function showTasks() {
       }`
     );
   });
-  showMenu();
 }
-function showMenu() {
+
+async function showMenu() {
   console.log("\n1. Añadir tarea");
   console.log("2. Eliminar tarea");
   console.log("3. Completar tarea");
   console.log("4. Mostrar tareas");
   console.log("5. Salir");
 
-  rl.question("Selecciona una opción: ", (option) => {
-    switch (option) {
-      case "1":
-        addTask();
-        break;
-      case "2":
-        deleteTask();
-        break;
-      case "3":
-        completeTask();
-        break;
-      case "4":
-        showTasks();
-        break;
-      case "5":
-        rl.close();
-        break;
-      default:
-        console.log("Opción inválida.");
-        showMenu();
-    }
+  const option = await new Promise((resolve) => {
+    rl.question("Selecciona una opción: ", (response) => {
+      resolve(response);
+    });
   });
+
+  switch (option) {
+    case "1":
+      await addTask();
+      break;
+    case "2":
+      await deleteTask();
+      break;
+    case "3":
+      await completeTask();
+      break;
+    case "4":
+      showTasks();
+      break;
+    case "5":
+      rl.close();
+      break;
+    default:
+      console.log("Opción inválida.");
+  }
+
+  await showMenu();
 }
 
 console.log("Bienvenido a la lista de tareas.");
