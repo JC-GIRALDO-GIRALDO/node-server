@@ -1,3 +1,4 @@
+const http = require("http");
 const readline = require("readline");
 
 const rl = readline.createInterface({
@@ -11,7 +12,7 @@ function addTask() {
   return new Promise((resolve) => {
     rl.question("Indicador: ", (indicador) => {
       rl.question("Descripción: ", (descripcion) => {
-        tasks.push({ indicador, descripcion, completada: false });
+        tasks.push({ id: tasks.length + 1, descripcion, completada: false });
         console.log("Tarea añadida.");
         resolve();
       });
@@ -51,7 +52,7 @@ async function showTasks() {
   console.log("Lista de tareas:");
   tasks.forEach((task, index) => {
     console.log(
-      `${index}: [${task.completada ? "X" : " "}] ${task.indicador} - ${
+      `${index}: [${task.completada ? "X" : " "}] ${task.id} - ${
         task.descripcion
       }`
     );
@@ -96,3 +97,21 @@ async function showMenu() {
 
 console.log("Bienvenido a la lista de tareas.");
 showMenu();
+
+const server = http.createServer((req, res) => {
+  const url = req.url;
+  if (url === "/tasks" && req.method === "GET") {
+    res.writeHead(200, { "Content-Type": "application/json" });
+    res.end(JSON.stringify(tasks));
+  } else {
+    res.writeHead(404, { "Content-Type": "text/plain" });
+    res.end("Not Found");
+  }
+});
+
+const port = 8080;
+server.listen(port, () => {
+  console.log(`Listening on port ${port}`);
+});
+
+//http://localhost:8080/tasks
