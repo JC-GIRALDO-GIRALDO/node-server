@@ -1,5 +1,9 @@
-const http = require("http");
 const readline = require("readline");
+const taskUtils = require("./taskUtils");
+const menu = require("./menu");
+const server = require("./server");
+const addTask = require("./addTask");
+const deleteTask = require("./deleteTask");
 
 const rl = readline.createInterface({
   input: process.stdin,
@@ -8,97 +12,64 @@ const rl = readline.createInterface({
 
 const tasks = [];
 
-function addTask() {
-  return new Promise((resolve) => {
-    rl.question("Indicador: ", (indicador) => {
-      rl.question("Descripción: ", (descripcion) => {
-        tasks.push({ id: tasks.length + 1, descripcion, completada: false });
-        console.log("Tarea añadida.");
-        resolve();
-      });
-    });
-  });
-}
-
-function deleteTask() {
-  return new Promise((resolve) => {
-    rl.question("Índice de la tarea a eliminar: ", (index) => {
-      if (index >= 0 && index < tasks.length) {
-        tasks.splice(index, 1);
-        console.log("Tarea eliminada.");
-      } else {
-        console.log("Índice inválido.");
-      }
-      resolve();
-    });
-  });
-}
-
-function completeTask() {
-  return new Promise((resolve) => {
+async function completeTask() {
+  const indexStr = await new Promise((resolve) => {
     rl.question("Índice de la tarea completada: ", (index) => {
-      if (index >= 0 && index < tasks.length) {
-        tasks[index].completada = true;
-        console.log("Tarea completada.");
-      } else {
-        console.log("Índice inválido.");
-      }
-      resolve();
+      resolve(index.trim());
     });
   });
+
+  const index = parseInt(indexStr, 10);
+
+  if (!isNaN(index)) {
+    taskUtils.completeTask(tasks, index);
+  } else {
+    console.log("Índice inválido.");
+  }
 }
 
 async function showTasks() {
   console.log("Lista de tareas:");
   tasks.forEach((task, index) => {
     console.log(
-      `${index}: [${task.completada ? "X" : " "}] ${task.id} - ${
-        task.descripcion
+      `${index}: [${task.completed ? "X" : " "}] ${task.id} - ${
+        task.description
       }`
     );
   });
 }
 
-async function showMenu() {
-  console.log("\n1. Añadir tarea");
-  console.log("2. Eliminar tarea");
-  console.log("3. Completar tarea");
-  console.log("4. Mostrar tareas");
-  console.log("5. Salir");
+async function app() {
+  console.log("Bienvenido a la lista de tareas.");
 
-  const option = await new Promise((resolve) => {
-    rl.question("Selecciona una opción: ", (response) => {
-      resolve(response);
-    });
-  });
+  while (true) {
+    const option = await menu.showMenu();
 
-  switch (option) {
-    case "1":
-      await addTask();
-      break;
-    case "2":
-      await deleteTask();
-      break;
-    case "3":
-      await completeTask();
-      break;
-    case "4":
-      showTasks();
-      break;
-    case "5":
-      rl.close();
-      break;
-    default:
-      console.log("Opción inválida.");
+    switch (option) {
+      case "1":
+        await addTask(tasks);
+        break;
+      case "2":
+        await deleteTask(tasks);
+        break;
+      case "3":
+        await completeTask();
+        break;
+      case "4":
+        await showTasks();
+        break;
+      case "5":
+        rl.close();
+        process.exit();
+      default:
+        console.log("Opción inválida.");
+    }
   }
-
-  await showMenu();
 }
 
-console.log("Bienvenido a la lista de tareas.");
-showMenu();
+const port = 8080;
 
-const server = http.createServer((req, res) => {
+server.startServer(port, (req, res) => {
   const url = req.url;
   if (url === "/tasks" && req.method === "GET") {
     res.writeHead(200, { "Content-Type": "application/json" });
@@ -109,9 +80,6 @@ const server = http.createServer((req, res) => {
   }
 });
 
-const port = 8080;
-server.listen(port, () => {
-  console.log(`Listening on port ${port}`);
-});
+app();
 
 //http://localhost:8080/tasks
