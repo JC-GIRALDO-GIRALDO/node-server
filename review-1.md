@@ -8,17 +8,14 @@ nuestra nueva aplicación de lista de tareas.
 ¿Qué hace "MiListaTareas"? En pocas palabras, es como tener un asistente personal para tus tareas diarias.
 Con esta aplicación, podrás:
 
-Mantener el Control: No más tareas pendientes que se pierden en el caos. "MiListaTareas" te permite llevar un registro
+1)Mantener el Control: No más tareas pendientes que se pierden en el caos. "MiListaTareas" te permite llevar un registro
 claro y organizado de todas tus actividades, asegurando que nada importante se quede en el olvido.
 
-Simplicidad en Acción: ¿No eres un experto en tecnología? ¡No hay problema! Nuestra interfaz amigable y fácil
+2)Simplicidad en Acción: ¿No eres un experto en tecnología? ¡No hay problema! Nuestra interfaz amigable y fácil
 de usar está diseñada para todos. Ingresar tareas es tan simple como responder algunas preguntas.
 
-Eliminar el Desorden: ¿Tareas que ya no son relevantes? Puedes eliminarlas con confianza.
+3)Eliminar el Desorden: ¿Tareas que ya no son relevantes? Puedes eliminarlas con confianza.
 La aplicación te permite eliminar tareas de manera efectiva y sin complicaciones.
-
-Celebrar Logros: Marcar tareas como completadas es gratificante y te permite mantener un registro
-visual de tus logros diarios.
 
 Entonces, ¿cómo funciona? Imagina que tienes un día ocupado por delante y necesitas llevar un registro de tus tareas.
 Con "MiListaTareas", simplemente ingresas las tareas que necesitas realizar, ya sea en el trabajo,
