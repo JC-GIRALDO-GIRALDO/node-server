@@ -1,21 +1,18 @@
-const readline = require("readline");
-const taskUtils = require("./taskUtils");
+const { v4: uuidv4 } = require("uuid");
 
-const rl = readline.createInterface({
-  input: process.stdin,
-  output: process.stdout,
-});
-
-async function addTask(tasks) {
-  const description = await new Promise((resolve) => {
-    rl.question("Descripción: ", (description) => {
-      resolve(description);
+module.exports = function addTask(tasks, rl) {
+  return new Promise((resolve) => {
+    rl.question("Nombre de la tarea: ", (nombre) => {
+      rl.question("Descripción de la tarea: ", (descripcion) => {
+        console.log("..........................");
+        console.log("Añadiendo tarea...");
+        setTimeout(() => {
+          tasks.push({ id: uuidv4(), nombre, descripcion, completada: false });
+          console.log("..........................");
+          console.log("Tarea añadida.");
+          resolve();
+        }, 3000);
+      });
     });
   });
-
-  const task = taskUtils.createTask(description);
-  tasks.push(task);
-  console.log("Tarea añadida.");
-}
-
-module.exports = addTask;
+};

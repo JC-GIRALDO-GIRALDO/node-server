@@ -1,10 +1,10 @@
-module.exports = function deleteTask(tasks, rl) {
+module.exports = function completeTask(tasks, rl) {
   return new Promise((resolve) => {
     setTimeout(() => {
-      rl.question("Índice de la tarea a eliminar: ", (index) => {
+      rl.question("Índice de la tarea completada: ", (index) => {
         if (index >= 0 && index < tasks.length) {
-          tasks.splice(index, 1);
-          console.log("Tarea eliminada.");
+          tasks[index].completada = true;
+          console.log("Tarea completada.");
         } else {
           console.log("Índice inválido.");
         }
